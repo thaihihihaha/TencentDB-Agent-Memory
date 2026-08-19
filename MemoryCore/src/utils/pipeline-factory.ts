@@ -84,7 +84,13 @@ const TAG = "[memory-tdai] [pipeline-factory]";
 // Previous value of 20 caused the extractor's slice(-10) to silently
 // truncate the first 5 rows per batch. Trade-off: drain rounds double
 // under backlog, but zero data loss.
-export const L1_BATCH_PROCESS = 10;
+// PATCH NỘI BỘ (Mắt Bão, 2026-08-19) — 10 → 50.
+// Lý do: free tier Gemini giới hạn 20 request/phút; batch 10 khiến backfill
+// 10.930 message cần ~1.090 lượt gọi LLM → 429 liên tục (đo được 576 lỗi/295 lượt).
+// Batch 50 giảm 5 lần số request. Giá trị này được TRUYỀN THẲNG xuống
+// l1-extractor qua options.maxMessagesPerExtraction (xem chỗ gọi extractL1Memories
+// bên dưới) nên hai bên không thể lệch nhau → không còn nguy cơ slice(-10) cắt mất dòng.
+export const L1_BATCH_PROCESS = 50;
 export const L1_BATCH_QUERY = L1_BATCH_PROCESS * 2;
 
 function supportsProfileSyncWrite(store?: IMemoryStore): boolean {
@@ -578,6 +584,7 @@ export function createL1Runner(opts: {
       let totalExtracted = 0;
       let totalStored = 0;
       let lastSceneName: string | undefined;
+      let anyGroupFailed = false;   // PATCH NỘI BỘ (Mắt Bão, 2026-08-19)
       const profileScopes = new Set<string>();
       const l1PromptTargets = groups.map((group) => ({
         teamId: group.teamId,
@@ -602,6 +609,10 @@ export function createL1Runner(opts: {
           baseDir: pluginDataDir,
           config,
           options: {
+            // PATCH NỘI BỘ (Mắt Bão, 2026-08-19): khoá cứng theo L1_BATCH_PROCESS.
+            // Trước đây không truyền → l1-extractor rơi về default 10, lệch với
+            // batch của pipeline và tạo ra 1 lượt gọi LLM cho mỗi 10 message.
+            maxMessagesPerExtraction: L1_BATCH_PROCESS,
             enableDedup: cfg.extraction.enableDedup,
             maxMemoriesPerSession: cfg.extraction.maxMemoriesPerSession,
             model: cfg.extraction.model,
@@ -623,6 +634,13 @@ export function createL1Runner(opts: {
           storage,
         });
 
+        // PATCH NỘI BỘ (Mắt Bão, 2026-08-19): nhớ lại có group nào thất bại.
+        // l1-extractor trả success=false khi lời gọi LLM lỗi (vd 429 rate limit)
+        // nhưng vẫn trả extractedCount=0, nên trước đây cursor vẫn tiến và cửa sổ
+        // L0 đó bị đánh dấu "đã xử lý" dù LLM chưa hề đọc (mất 399 cửa sổ).
+        if (!l1Result.success) {
+          anyGroupFailed = true;
+        }
         totalExtracted += l1Result.extractedCount;
         totalStored += l1Result.storedCount;
         if (l1Result.storedCount > 0) {
@@ -645,7 +663,18 @@ export function createL1Runner(opts: {
       // Use maxRecordedAtMs (write time) of the **processed** slice as cursor —
       // always positive, TCVDB-safe. Boundary alignment guarantees we will not
       // skip same-ms siblings on the next round.
-      await checkpoint.markL1ExtractionComplete(sessionKey, totalStored, maxRecordedAtMs || undefined, lastSceneName);
+      // PATCH NỘI BỘ (Mắt Bão, 2026-08-19): thất bại → GIỮ cursor (truyền undefined;
+      // markL1ExtractionComplete chỉ ghi khi cursor có giá trị), để lượt sau đọc lại
+      // đúng cửa sổ đó thay vì bỏ mất dữ liệu. Đánh đổi: nếu một batch luôn lỗi
+      // (không phải rate-limit) thì nó sẽ bị thử lại mãi — theo dõi WARN dưới đây.
+      const cursorToWrite = anyGroupFailed ? undefined : (maxRecordedAtMs || undefined);
+      await checkpoint.markL1ExtractionComplete(sessionKey, totalStored, cursorToWrite, lastSceneName);
+      if (anyGroupFailed) {
+        logger.warn?.(
+          `${TAG} [l1] GIỮ CURSOR: có group thất bại (rất có thể rate-limit) — ` +
+          `cửa sổ L0 này sẽ được rút lại ở lượt sau`,
+        );
+      }
       logger.info(
         `${TAG} [l1] L1 complete: extracted=${totalExtracted}, stored=${totalStored} (${groups.length} group(s))`,
       );
