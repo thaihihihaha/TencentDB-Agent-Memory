@@ -1391,12 +1391,8 @@ button:not(:disabled):active,
   background: var(--mx-surface-card);
 }
 
-._wiki-detail-graph-embed > div {
-  background: var(--mx-surface-card) !important;
-}
-
-._wiki-detail-graph-embed > div > [class*='border-b'],
-._wiki-detail-graph-embed > div > [class*='border-t'] {
+._wiki-detail-graph-embed > [class*='border-b'],
+._wiki-detail-graph-embed > [class*='border-t'] {
   min-height: var(--mx-table-row-height);
   padding: var(--mx-space-2) var(--mx-space-3);
   border-color: var(--mx-border-subtle);
@@ -1449,10 +1445,4 @@ button:not(:disabled):active,
   border-radius: var(--mx-button-radius);
   background: color-mix(in srgb, var(--mx-surface-card) 90%, transparent);
   box-shadow: var(--mx-shadow-xs);
-}
-
-@media (max-width: 720px) {
-  ._asset-page-header {
-    padding: var(--mx-space-6) var(--mx-space-4) var(--mx-space-4);
-  }
 }
