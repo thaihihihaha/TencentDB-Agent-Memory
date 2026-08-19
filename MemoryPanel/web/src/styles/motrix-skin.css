@@ -1,1 +1,185 @@
 /* Motrix visual skin for the existing Tea/React behavior layer. */
+
+/* Shell */
+html,
+body,
+#root,
+._memory-app-shell {
+  background: var(--mx-shell-gradient);
+}
+
+body {
+  font-family: var(--mx-font-family);
+  color: var(--mx-text-primary);
+}
+
+._memory-app-shell,
+._memory-app-shell > .tea-layout,
+._memory-app-shell .tea-layout__body {
+  background: transparent;
+}
+
+._memory-app-shell .tea-layout__content {
+  min-width: 0;
+  margin: var(--mx-content-inset) var(--mx-content-inset) var(--mx-content-inset) 0;
+  overflow: hidden;
+  border: 1px solid var(--mx-border-subtle);
+  border-radius: var(--mx-content-radius);
+  background: var(--mx-surface-content);
+  box-shadow: var(--mx-shadow-sm);
+  backdrop-filter: blur(24px) saturate(1.05);
+}
+
+._memory-content-body {
+  padding: var(--mx-space-4);
+  background: transparent;
+}
+
+/* Header */
+._memory-global-header {
+  height: var(--mx-header-height);
+  padding: 0 var(--mx-space-4);
+  background: transparent;
+  border-bottom: 0;
+}
+
+._memory-global-header-brand-text {
+  color: var(--mx-text-primary);
+}
+
+._memory-global-header-icon-btn,
+._memory-global-header-user-btn,
+._memory-lang-switcher-btn,
+._memory-team-switcher-trigger {
+  border: 0;
+  border-radius: var(--mx-radius-md);
+  background: transparent;
+}
+
+._memory-global-header-icon-btn {
+  width: 32px;
+  height: 32px;
+  color: var(--mx-text-secondary);
+}
+
+._memory-global-header-icon-btn svg,
+._memory-lang-switcher-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+._memory-global-header-icon-btn:hover,
+._memory-global-header-user-btn:hover,
+._memory-lang-switcher-btn:hover,
+._memory-team-switcher-trigger:hover {
+  background: var(--mx-surface-selected);
+  border-color: transparent;
+  color: var(--mx-text-primary);
+}
+
+/* Sidebar */
+._memory-app-shell .tea-menu--light.tea-menu,
+._memory-app-shell .tea-menu--light .tea-menu__body {
+  width: var(--mx-sidebar-width);
+  border-right: 0;
+  background: transparent;
+}
+
+._memory-app-shell .tea-menu-is-collapsed.tea-menu--light,
+._memory-app-shell .tea-menu-is-collapsed.tea-menu--light .tea-menu__body {
+  width: var(--mx-sidebar-width-collapsed);
+}
+
+._memory-app-shell .tea-menu--light .tea-menu__list > li:not(.tea-menu__label) {
+  margin: 2px var(--mx-space-2);
+}
+
+._memory-app-shell .tea-menu--light .tea-menu__list > li:not(.tea-menu__label) > .tea-menu__item {
+  height: var(--mx-sidebar-row-height);
+  gap: var(--mx-space-2);
+  padding: 0 var(--mx-space-2-5);
+  border-radius: var(--mx-sidebar-row-radius);
+}
+
+._memory-app-shell .tea-menu--light .tea-menu__list > li:not(.tea-menu__label).is-selected > .tea-menu__item,
+._memory-app-shell .tea-menu--light .tea-menu__list > li:not(.tea-menu__label) > .tea-menu__item:hover {
+  background: var(--mx-surface-selected) !important;
+  color: var(--mx-text-primary);
+}
+
+._memory-app-shell .tea-menu--light .tea-menu__text {
+  color: var(--mx-text-secondary);
+}
+
+._memory-app-shell .tea-menu--light .tea-menu__list > li:not(.tea-menu__label).is-selected > .tea-menu__item .tea-menu__text,
+._memory-app-shell .tea-menu--light .tea-menu__list > li:not(.tea-menu__label) > .tea-menu__item:hover .tea-menu__text {
+  color: var(--mx-text-primary) !important;
+}
+
+._memory-app-shell .tea-menu--light .tea-menu__footer {
+  height: var(--mx-sidebar-width-collapsed);
+  border-top: 0;
+  background: transparent;
+}
+
+._memory-app-shell .tea-menu--light .tea-menu__fold {
+  width: var(--mx-sidebar-width-collapsed);
+  height: var(--mx-sidebar-width-collapsed);
+}
+
+._memory-app-shell .tea-menu--light .tea-menu__fold-icon {
+  width: 32px;
+  height: 32px;
+  left: var(--mx-space-2);
+  top: var(--mx-space-2);
+}
+
+._memory-app-shell .tea-menu--light .tea-menu__fold-icon .ruyi-icon-menu-unfold,
+._memory-app-shell .tea-menu--light .tea-menu__fold-icon .tea-icon-fold {
+  left: var(--mx-space-2);
+  top: var(--mx-space-2);
+}
+
+/* Tabs */
+._memory-tabbar {
+  height: var(--mx-tabbar-height);
+  margin: var(--mx-space-2) var(--mx-space-2) 0;
+  padding: 3px;
+  gap: var(--mx-space-0-5);
+  border: 0;
+  border-radius: var(--mx-radius-lg);
+  background: var(--mx-surface-subtle);
+}
+
+._memory-tabbar-item {
+  height: 30px;
+  padding: 0 var(--mx-space-2-5);
+  border: 0;
+  border-radius: var(--mx-radius-md);
+  color: var(--mx-text-secondary);
+}
+
+._memory-tabbar-item:hover {
+  color: var(--mx-text-primary);
+  background: var(--mx-surface-selected);
+}
+
+._memory-tabbar-item--active {
+  color: var(--mx-text-primary);
+  background: var(--mx-surface-card);
+  box-shadow: var(--mx-shadow-xs);
+}
+
+._memory-tabbar-close {
+  border-radius: var(--mx-radius-sm);
+  color: var(--mx-text-secondary);
+}
+
+._memory-tabbar-close:hover {
+  background: var(--mx-surface-selected);
+  color: var(--mx-text-primary);
+}
+
+._memory-tabbar-item:focus-visible {
+  outline-color: var(--mx-action-focus);
+}
