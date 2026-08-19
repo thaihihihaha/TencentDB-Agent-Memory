@@ -1508,11 +1508,27 @@ button:not(:disabled):active,
   font-size: var(--mx-font-meta);
 }
 
+._memory-profile-identity-id.tea-text-weak,
+._memory-profile-section-label.tea-text-label,
+._memory-profile-section-hint.tea-text-weak {
+  color: var(--mx-text-secondary) !important;
+}
+
 ._memory-team-header-avatar,
 ._memory-agent-card-icon,
 ._memory-member-avatar {
   width: 40px;
   height: 40px;
+}
+
+._memory-profile-identity > svg {
+  flex: 0 0 var(--mx-space-10);
+  width: var(--mx-space-10);
+  height: var(--mx-space-10);
+}
+
+._memory-member-id + ._memory-member-role[style] {
+  font-size: var(--mx-font-meta) !important;
 }
 
 ._memory-agents-panel .tea-table td,
@@ -1567,10 +1583,19 @@ button:not(:disabled):active,
   font-weight: 600;
 }
 
+._memory-settings-title.tea-text-label {
+  color: var(--mx-text-primary) !important;
+}
+
 ._memory-settings-description {
   margin-bottom: var(--mx-space-4);
   color: var(--mx-text-secondary);
   font-size: var(--mx-font-meta);
+}
+
+._memory-settings-description.tea-text-weak,
+._memory-settings-module-description.tea-text-weak {
+  color: var(--mx-text-secondary) !important;
 }
 
 ._memory-settings-body > .tea-alert {
