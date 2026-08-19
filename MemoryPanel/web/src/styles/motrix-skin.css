@@ -795,3 +795,664 @@ button:not(:disabled):active,
 ._memory-workbench-pagination {
   padding: var(--mx-space-4) 0 var(--mx-space-2);
 }
+
+/* Resource surfaces */
+._asset-page-header {
+  --card-body-padding: 0;
+  padding: var(--mx-space-8) var(--mx-space-6) var(--mx-space-4);
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+._asset-page-header-title {
+  color: var(--mx-text-primary);
+  font-size: var(--mx-font-title);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+._asset-page-header-subtitle {
+  color: var(--mx-text-secondary);
+  font-size: var(--mx-font-meta);
+}
+
+._asset-page-header-main,
+._asset-page-header-right {
+  gap: var(--mx-space-4);
+}
+
+._asset-page-header-filters,
+._asset-page-header-actions {
+  gap: var(--mx-space-2);
+}
+
+._asset-split,
+._memory-skills-split {
+  gap: 0;
+  overflow: hidden;
+  border: 1px solid var(--mx-border-subtle);
+  border-radius: var(--mx-card-radius);
+  background: var(--mx-surface-card);
+}
+
+._asset-split-resizer {
+  outline: 0;
+}
+
+._asset-split-resizer-bar {
+  background: var(--mx-border-subtle);
+  transition: background-color var(--mx-duration-fast) var(--mx-ease-standard);
+}
+
+._asset-split-resizer:hover ._asset-split-resizer-bar {
+  background: var(--mx-border-default);
+}
+
+._asset-split-resizer:focus-visible ._asset-split-resizer-bar,
+._asset-split--dragging ._asset-split-resizer-bar {
+  background: var(--mx-action-focus);
+}
+
+._asset-split-resizer:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--mx-surface-card);
+}
+
+._asset-split-sidebar,
+._asset-split-detail {
+  background: var(--mx-surface-card);
+}
+
+/* Shared resource list rhythm */
+._alp {
+  padding: var(--mx-space-2);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+._alp-header {
+  min-height: var(--mx-table-row-height);
+  margin: 0;
+  padding: 0 var(--mx-space-3);
+  border-bottom-color: var(--mx-border-subtle);
+}
+
+._alp-title {
+  color: var(--mx-text-primary);
+  font-size: var(--mx-font-body);
+  font-weight: 600;
+}
+
+._alp-count,
+._alp-title-suffix {
+  color: var(--mx-text-secondary);
+  font-size: var(--mx-font-meta);
+}
+
+._alp-items {
+  padding: var(--mx-space-1) 0;
+}
+
+._alp-item,
+._memory-skill-item,
+._memory-personal-asset,
+._memory-card {
+  min-height: var(--mx-table-row-height);
+  border: 0;
+  border-radius: var(--mx-card-radius);
+  background: transparent;
+}
+
+._alp-item {
+  margin: var(--mx-space-0-5) 0;
+  overflow: hidden;
+}
+
+._alp-item-btn,
+._memory-skill-item,
+._memory-personal-asset {
+  min-height: var(--mx-table-row-height);
+  padding: var(--mx-space-2) var(--mx-space-3) !important;
+  border-radius: var(--mx-card-radius);
+  transition:
+    color var(--mx-duration-fast) var(--mx-ease-standard),
+    background-color var(--mx-duration-fast) var(--mx-ease-standard);
+}
+
+._alp-item-btn:hover,
+._memory-skill-item:hover,
+._memory-personal-asset:hover {
+  background: var(--mx-surface-subtle);
+}
+
+._alp-item--selected ._alp-item-btn,
+._alp-item--selected ._alp-item-btn:hover,
+._memory-skill-item.is-selected,
+._memory-skill-item.is-selected:hover,
+._memory-personal-asset.is-selected,
+._memory-personal-asset.is-selected:hover {
+  background: var(--mx-surface-selected);
+}
+
+._alp-item-btn:focus-visible,
+._memory-skill-item:focus-visible,
+._memory-personal-asset:focus-visible {
+  outline: 2px solid var(--mx-action-focus);
+  outline-offset: -2px;
+}
+
+._alp-item--disabled ._alp-item-btn,
+._alp-item--disabled ._alp-item-btn:hover {
+  background: transparent;
+  opacity: 0.5;
+}
+
+._alp-item-name,
+._memory-skill-item-name,
+._memory-personal-asset-name,
+._memory-card-title {
+  color: var(--mx-text-primary);
+  font-size: var(--mx-font-body);
+  font-weight: 600;
+}
+
+._alp-item-desc,
+._alp-item-meta,
+._alp-item-time,
+._alp-badge,
+._memory-skill-item-desc,
+._memory-skill-item-meta,
+._memory-skill-item-time,
+._memory-personal-asset-desc,
+._memory-personal-asset-id,
+._memory-card-id,
+._memory-card ._alp-badge {
+  color: var(--mx-text-secondary);
+  font-size: var(--mx-font-meta);
+}
+
+._alp-item-id,
+._alp-item-time,
+._memory-skill-item-time,
+._memory-personal-asset-id,
+._memory-card-id {
+  font-variant-numeric: tabular-nums;
+}
+
+._alp-empty,
+._alp-detail-empty,
+._memory-personal-empty {
+  color: var(--mx-text-secondary);
+  font-size: var(--mx-font-meta);
+}
+
+._alp-skeleton,
+._asset-wiki-skeleton-card,
+._codelist-skeleton-card,
+._memory-detail-skel-atomic {
+  border-color: var(--mx-border-subtle);
+  border-radius: var(--mx-card-radius);
+  background: var(--mx-surface-card);
+  box-shadow: none;
+}
+
+._alp-skeleton-line,
+._asset-wiki-skeleton-line,
+._codelist-skeleton-line,
+._memory-detail-skel-line,
+._memory-detail-skel-block,
+._memory-detail-skeleton-row {
+  background-color: var(--mx-surface-subtle);
+}
+
+/* Wiki and code list surfaces */
+._asset-wiki-content-card,
+._asset-code-content-card {
+  --card-body-padding: var(--mx-space-4);
+  border-color: var(--mx-border-subtle);
+  border-radius: var(--mx-card-radius);
+  background: var(--mx-surface-card);
+  box-shadow: none;
+}
+
+._asset-wiki-toolbar,
+._asset-code-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding-bottom: var(--mx-space-3);
+  background: var(--mx-surface-card);
+}
+
+._asset-wiki-card,
+._codelist-card {
+  min-height: var(--mx-table-row-height);
+  padding: var(--mx-space-4);
+  border: 1px solid var(--mx-border-subtle);
+  border-radius: var(--mx-card-radius);
+  background: var(--mx-surface-card);
+  box-shadow: none;
+  transition:
+    background-color var(--mx-duration-fast) var(--mx-ease-standard),
+    border-color var(--mx-duration-fast) var(--mx-ease-standard),
+    box-shadow var(--mx-duration-fast) var(--mx-ease-standard);
+}
+
+._asset-wiki-card:hover,
+._codelist-card:hover {
+  border-color: var(--mx-border-default);
+  background: var(--mx-surface-subtle);
+  box-shadow: var(--mx-shadow-xs);
+}
+
+._codelist-card.is-selected,
+._codelist-card.is-selected:hover {
+  border-color: var(--mx-border-default);
+  background: var(--mx-surface-selected);
+}
+
+._asset-wiki-card-name,
+._asset-wiki-row-name,
+._codelist-card-name,
+._codelist-row-name {
+  color: var(--mx-text-primary);
+  font-size: var(--mx-font-body);
+  font-weight: 600;
+}
+
+._asset-wiki-card-meta,
+._asset-wiki-card-owner,
+._asset-wiki-card-id,
+._asset-wiki-id,
+._codelist-card-meta,
+._codelist-card-owner,
+._codelist-card-id,
+._codelist-id,
+._codelist-branch {
+  color: var(--mx-text-secondary);
+  font-size: var(--mx-font-meta);
+  font-variant-numeric: tabular-nums;
+}
+
+._asset-wiki-card-chevron,
+._codelist-card-chevron,
+._asset-wiki-card:hover ._asset-wiki-card-chevron,
+._codelist-card:hover ._codelist-card-chevron,
+._codelist-card-name-trigger:hover ._codelist-card-chevron {
+  color: var(--mx-text-secondary);
+  transform: none;
+}
+
+._asset-wiki-actions,
+._codelist-card-actions {
+  border-top-color: var(--mx-border-subtle);
+}
+
+._asset-wiki-empty,
+._asset-code-empty {
+  color: var(--mx-text-secondary);
+  font-size: var(--mx-font-meta);
+}
+
+/* Wiki, code, skill, and memory detail cards */
+._wiki-detail-root > .tea-card,
+._wiki-detail-ingest-card,
+._wiki-detail-content-card,
+._codedetail-root > .tea-card,
+._memory-skill-detail-card,
+._memory-detail-panel,
+._memory-detail,
+._memory-detail-empty-card {
+  border: 1px solid var(--mx-border-subtle);
+  border-radius: var(--mx-card-radius);
+  background: var(--mx-surface-card);
+  box-shadow: none;
+}
+
+._memory-skill-detail-card,
+._memory-detail-panel,
+._memory-detail,
+._memory-detail-empty-card {
+  border: 0;
+  border-radius: 0;
+}
+
+._wiki-detail-title,
+._codedetail-title,
+._memory-skill-detail-name,
+._memory-detail-title {
+  color: var(--mx-text-primary);
+  font-size: var(--mx-font-body);
+  font-weight: 600;
+}
+
+._detail-meta-row,
+._wiki-detail-breadcrumb,
+._codedetail-breadcrumb,
+._memory-skill-detail-desc,
+._memory-detail-meta,
+._memory-detail-title-id {
+  color: var(--mx-text-secondary);
+  font-size: var(--mx-font-meta);
+  font-variant-numeric: tabular-nums;
+}
+
+._wiki-detail-tabs .tea-tabs__tabitem {
+  height: var(--mx-table-row-height);
+  border-color: var(--mx-border-subtle);
+}
+
+._wiki-detail-tabs .tea-tabs__tab:hover,
+._wiki-detail-tabs .tea-tabs__tab.is-active {
+  background: var(--mx-surface-selected);
+  color: var(--mx-text-primary);
+}
+
+._wiki-detail-overview-item,
+._wiki-detail-search-item,
+._wiki-detail-upload-file,
+._wiki-detail-markdown-doc,
+._memory-skill-files-box,
+._memory-skill-detail-json,
+._memory-skill-file-content,
+._codedetail-result-box,
+._memory-detail-atomic-item {
+  border-color: var(--mx-border-subtle);
+  border-radius: var(--mx-card-radius);
+  background: var(--mx-surface-card);
+  box-shadow: none;
+}
+
+._wiki-detail-overview-item:hover,
+._wiki-detail-search-item:hover,
+._memory-detail-atomic-item:hover {
+  border-color: var(--mx-border-default);
+  background: var(--mx-surface-subtle);
+  box-shadow: none;
+}
+
+._wiki-detail-split {
+  border-color: var(--mx-border-subtle);
+  border-radius: var(--mx-card-radius);
+  background: var(--mx-surface-card);
+}
+
+._wiki-detail-split-content,
+._wiki-detail-side-content,
+._memory-skill-files-box,
+._memory-skill-detail-json,
+._memory-skill-file-content,
+._codedetail-result-box {
+  background: var(--mx-surface-subtle);
+}
+
+._wiki-detail-resize-handle {
+  background: var(--mx-border-subtle);
+}
+
+._wiki-detail-resize-handle:hover,
+._wiki-detail-resize-handle:active {
+  background: var(--mx-action-focus);
+}
+
+._wiki-detail-filter-tag {
+  border-color: var(--mx-border-default);
+  border-radius: var(--mx-radius-full);
+  background: var(--mx-surface-card);
+  color: var(--mx-text-secondary);
+}
+
+._wiki-detail-filter-tag:hover,
+._wiki-detail-filter-tag.is-active {
+  border-color: var(--mx-border-default);
+  background: var(--mx-surface-selected);
+  color: var(--mx-text-primary);
+}
+
+._wiki-detail-page-row,
+._wiki-detail-rawfiles-item {
+  min-height: var(--mx-table-row-height);
+  border-bottom-color: var(--mx-border-subtle);
+}
+
+._wiki-detail-page-row:hover,
+._wiki-detail-rawfiles-item:hover,
+._wiki-detail-page-row.is-active {
+  background: var(--mx-surface-selected);
+}
+
+._wiki-detail-page-row.is-active ._wiki-detail-page-item {
+  color: var(--mx-text-primary);
+  font-weight: 600;
+}
+
+._wiki-detail-dropzone {
+  border-color: var(--mx-border-default);
+  border-radius: var(--mx-card-radius);
+  background: var(--mx-surface-subtle);
+  color: var(--mx-text-secondary);
+}
+
+._wiki-detail-dropzone:hover {
+  background: var(--mx-surface-selected);
+}
+
+._wiki-detail-search-item-title,
+._wiki-detail-content-title,
+._wiki-detail-side-title,
+._memory-detail-atomic-title {
+  color: var(--mx-text-primary);
+  font-size: var(--mx-font-body);
+}
+
+._wiki-detail-search-item-score,
+._wiki-detail-search-item-snippet,
+._wiki-detail-upload-file,
+._wiki-detail-rawfiles-loading,
+._memory-skill-edit-hint,
+._memory-skill-version-label,
+._memory-skill-file-btn,
+._memory-skill-dir,
+._codedetail-hint,
+._memory-detail-search-count,
+._memory-detail-search-score,
+._memory-detail-atomic-meta,
+._memory-detail-atomic-time {
+  font-size: var(--mx-font-meta);
+  font-variant-numeric: tabular-nums;
+}
+
+._memory-skill-detail-head,
+._memory-skill-detail-footer,
+._memory-detail-head {
+  border-color: var(--mx-border-subtle);
+}
+
+._memory-skill-edit-textarea,
+._memory-skill-edit-textarea textarea,
+._memory-detail-edit-textarea,
+._memory-detail-edit-textarea textarea {
+  border-radius: var(--mx-input-radius);
+  background: var(--mx-surface-card);
+  color: var(--mx-text-primary);
+}
+
+._memory-detail-layer-btn {
+  min-height: var(--mx-table-row-height);
+  border-color: var(--mx-border-subtle);
+  border-radius: var(--mx-radius-lg);
+  background: var(--mx-surface-card);
+}
+
+._memory-detail-layer-btn:hover,
+._memory-detail-layer-btn--active,
+._memory-detail-layer-btn--active:hover {
+  border-color: var(--mx-border-default);
+  background: var(--mx-surface-selected);
+}
+
+._memory-detail-layer-label {
+  color: var(--mx-text-primary);
+  font-size: var(--mx-font-meta);
+}
+
+._memory-detail-layer-count,
+._memory-detail-layer-desc {
+  color: var(--mx-text-secondary);
+  font-size: var(--mx-font-meta);
+  font-variant-numeric: tabular-nums;
+}
+
+._memory-detail-mode-switch {
+  border-color: var(--mx-border-subtle);
+  border-radius: var(--mx-radius-md);
+  background: var(--mx-surface-subtle);
+}
+
+._memory-detail-mode-btn {
+  border-radius: var(--mx-radius-sm);
+  color: var(--mx-text-secondary);
+}
+
+._memory-detail-mode-btn:hover:not(:disabled):not(._memory-detail-mode-btn--active) {
+  color: var(--mx-text-primary);
+}
+
+._memory-detail-mode-btn--active {
+  background: var(--mx-surface-card);
+  color: var(--mx-text-primary);
+  box-shadow: var(--mx-shadow-xs);
+}
+
+._memory-chat-bubble {
+  border-color: var(--mx-border-subtle);
+  border-radius: var(--mx-card-radius);
+  background: var(--mx-surface-card);
+  box-shadow: none;
+}
+
+._memory-chat-bubble:hover {
+  box-shadow: var(--mx-shadow-xs);
+}
+
+._memory-chat-bubble--assistant,
+._memory-chat-bubble--tool {
+  border-top-left-radius: var(--mx-radius-sm);
+}
+
+._memory-chat-bubble--user {
+  border-color: var(--mx-border-subtle);
+  border-top-right-radius: var(--mx-radius-sm);
+  background: var(--mx-surface-selected);
+}
+
+._memory-chat-role {
+  color: var(--mx-text-secondary);
+  font-size: var(--mx-font-label);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+._memory-chat-time,
+._memory-chat-system-time,
+._memory-chat-more-end {
+  color: var(--mx-text-secondary);
+  font-size: var(--mx-font-meta);
+  font-variant-numeric: tabular-nums;
+}
+
+._memory-chat-system,
+._memory-chat-more-btn {
+  border-color: var(--mx-border-subtle);
+  border-radius: var(--mx-radius-full);
+  background: var(--mx-surface-subtle);
+  color: var(--mx-text-secondary);
+}
+
+._memory-chat-more-btn:hover {
+  border-color: var(--mx-border-default);
+  background: var(--mx-surface-selected);
+  color: var(--mx-text-primary);
+}
+
+._memory-detail-pager {
+  padding-top: var(--mx-space-3);
+  border-top: 1px solid var(--mx-border-subtle);
+}
+
+/* Existing Sigma/Graphology DOM, presented as a Motrix graph surface. */
+._wiki-detail-graph-embed {
+  overflow: hidden;
+  border: 1px solid var(--mx-border-subtle);
+  border-radius: var(--mx-card-radius);
+  background: var(--mx-surface-card);
+}
+
+._wiki-detail-graph-embed > div {
+  background: var(--mx-surface-card) !important;
+}
+
+._wiki-detail-graph-embed > div > [class*='border-b'],
+._wiki-detail-graph-embed > div > [class*='border-t'] {
+  min-height: var(--mx-table-row-height);
+  padding: var(--mx-space-2) var(--mx-space-3);
+  border-color: var(--mx-border-subtle);
+  background: var(--mx-surface-subtle) !important;
+  color: var(--mx-text-secondary);
+  backdrop-filter: blur(8px);
+}
+
+._wiki-detail-graph-embed input {
+  min-height: var(--mx-button-height-sm);
+  border: 1px solid var(--mx-border-default);
+  border-radius: var(--mx-input-radius);
+  background: var(--mx-surface-card);
+  color: var(--mx-text-primary);
+  font-size: var(--mx-font-meta);
+}
+
+._wiki-detail-graph-embed input:focus-visible {
+  border-color: var(--mx-action-focus);
+  outline: 3px solid color-mix(in srgb, var(--mx-action-focus) 50%, transparent);
+  outline-offset: 0;
+}
+
+._wiki-detail-graph-embed button {
+  border-radius: var(--mx-button-radius);
+  color: var(--mx-text-secondary);
+}
+
+._wiki-detail-graph-embed button:hover {
+  background: var(--mx-surface-selected);
+  color: var(--mx-text-primary);
+}
+
+._wiki-detail-graph-embed button:focus-visible {
+  outline: 2px solid var(--mx-action-focus);
+  outline-offset: 2px;
+}
+
+._wiki-detail-graph-embed [class*='top-12'] {
+  border-color: var(--mx-border-subtle);
+  border-radius: var(--mx-card-radius);
+  background: color-mix(in srgb, var(--mx-surface-card) 95%, transparent);
+  box-shadow: var(--mx-shadow-sm);
+}
+
+._wiki-detail-graph-embed [class*='bottom-3'] button {
+  width: var(--mx-button-height-sm);
+  height: var(--mx-button-height-sm);
+  border: 1px solid var(--mx-border-subtle);
+  border-radius: var(--mx-button-radius);
+  background: color-mix(in srgb, var(--mx-surface-card) 90%, transparent);
+  box-shadow: var(--mx-shadow-xs);
+}
+
+@media (max-width: 720px) {
+  ._asset-page-header {
+    padding: var(--mx-space-6) var(--mx-space-4) var(--mx-space-4);
+  }
+}
