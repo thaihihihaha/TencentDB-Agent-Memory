@@ -193,6 +193,24 @@ export function registerKnowledgeCodeGraphRoutes(api: Hono, deps: PanelDeps): vo
     return runKs(c, () => kc.codeGraphQuery(cgId, 'search', params));
   });
 
+  // PATCH NỘI BỘ (Mắt Bão, 2026-08-19) — C7b neighbors: subgraph có cấu trúc để vẽ diagram.
+  // Cùng gate quyền như search/explore; chỉ khác ở chỗ trả { nodes, edges } thay vì text.
+  api.post('/knowledge/code-graph/neighbors', mw, async (c) => {
+    const ctx = buildCtx(c);
+    const body = await readJson(c);
+    const cgId = str(body, 'code_graph_id');
+    const symbol = str(body, 'symbol');
+    if (!cgId) return respondControlError(c, 400, 'MISSING_CODE_GRAPH_ID');
+    if (!symbol) return respondControlError(c, 400, 'MISSING_SYMBOL');
+    const gate = await requireKnowledgeRead(deps, c, ctx, cgId);
+    if ('error' in gate) return gate.error;
+    const kc = deps.knowledgeClientFactory(ctx.instanceId);
+    const depth = typeof body.depth === 'number' ? body.depth : 1;
+    const maxNodes = typeof body.max_nodes === 'number' ? body.max_nodes : undefined;
+    const file = str(body, 'file') || undefined;
+    return runKs(c, () => kc.codeGraphNeighbors(cgId, symbol, { depth, file, maxNodes }));
+  });
+
   // C8 explore — id-only
   api.post('/knowledge/code-graph/explore', mw, async (c) => {
     const ctx = buildCtx(c);

@@ -467,6 +467,24 @@ export const knowledgeApi = {
     explore: (codeGraphId: string, query: string): Promise<{ text: string; isError: boolean }> =>
       panelPost('/code-graph/explore', { code_graph_id: codeGraphId, query }),
 
+    /**
+     * PATCH NỘI BỘ (Mắt Bão, 2026-08-19): subgraph quanh 1 symbol, shape GraphData
+     * giống Wiki nên dùng lại được KnowledgeGraph.tsx. Các API code khác chỉ trả text.
+     * Không lấy cả đồ thị: repo thật có ~28k node / ~78k edge.
+     */
+    neighbors: (
+      codeGraphId: string,
+      symbol: string,
+      opts?: { depth?: number; file?: string; maxNodes?: number },
+    ): Promise<GraphData & { roots?: string[]; matched?: number; truncated?: boolean }> =>
+      panelPost('/code-graph/neighbors', {
+        code_graph_id: codeGraphId,
+        symbol,
+        depth: opts?.depth ?? 1,
+        ...(opts?.file ? { file: opts.file } : {}),
+        ...(opts?.maxNodes ? { max_nodes: opts.maxNodes } : {}),
+      }),
+
     /** 详情（用于 sync 后轮询） */
     get: (codeGraphId: string): Promise<CodeGraphDetail> =>
       panelPost('/code-graph/get', { code_graph_id: codeGraphId }),

@@ -319,6 +319,97 @@ export function createCodeGraphRoutes(deps: CodeGraphRouteDeps): Hono {
   // ═══════════════════ Query (8 codegraph tools, all id-only) ═══════════════════
 
   // Register all query endpoints from the shared tool name list
+  /**
+   * PATCH NỘI BỘ (Mắt Bão, 2026-08-19) — POST /neighbors
+   *
+   * Vì sao cần: các tool code_* đều trả `{ text }` (định dạng cho LLM đọc), nên Panel
+   * không có dữ liệu có cấu trúc để vẽ. Wiki thì có `POST /wiki/graph` trả
+   * `{ nodes, edges }` và render bằng graphology + @react-sigma (KnowledgeGraph.tsx),
+   * còn CodeGraph thì upstream chưa làm phần hình.
+   *
+   * Endpoint này trả subgraph quanh MỘT symbol (không phải cả đồ thị: repo lms-poc có
+   * 28.158 node / 78.525 edge, vẽ hết là vô nghĩa), theo đúng shape GraphData của Panel.
+   */
+  app.post("/neighbors", async (c) => {
+    const body = await c.req.json<Record<string, unknown>>();
+
+    const serviceId = c.req.header("x-tdai-service-id");
+    if (!isValidIdSegment(serviceId)) return c.json(wrapError(400, "x-tdai-service-id header is required"), 400);
+    const cgId = body.code_graph_id;
+    if (!isValidIdSegment(cgId)) return c.json(wrapError(400, "code_graph_id is required"), 400);
+    const symbol = typeof body.symbol === "string" ? body.symbol.trim() : "";
+    if (!symbol) return c.json(wrapError(400, "symbol is required"), 400);
+
+    const rawDepth = typeof body.depth === "number" ? body.depth : 1;
+    const depth = Math.min(Math.max(Math.trunc(rawDepth) || 1, 1), 2); // chặn 1..2: depth 3 nổ hàng nghìn node
+    const maxNodes = Math.min(Math.max(Number(body.max_nodes) || 200, 10), 500);
+
+    const row = cgService.getById(serviceId, cgId);
+    if (!row) return c.json(wrapError(404, "code graph not found"), 404);
+    if (row.status !== "ready") return c.json(wrapOk({ nodes: [], edges: [], roots: [] }));
+
+    let instance = instancePool.get(cgId);
+    if (!instance && instancePool.loadIfMissing) {
+      const dir = cgService.dirFor(serviceId, row.team_id, cgId);
+      instance = await instancePool.loadIfMissing(cgId, dir);
+    }
+    if (!instance) return c.json(wrapError(503, "code graph instance not loaded"), 503);
+
+    const cg = (instance as { cg: any }).cg;
+
+    // Tìm node gốc theo tên chính xác; nếu trùng tên (overload) thì cho lọc bằng `file`.
+    const fileHint = typeof body.file === "string" ? body.file : undefined;
+    let candidates: any[] = cg.getNodesByName(symbol) ?? [];
+    if (fileHint) candidates = candidates.filter((n) => String(n.filePath ?? "").includes(fileHint));
+    if (candidates.length === 0) {
+      return c.json(wrapOk({ nodes: [], edges: [], roots: [], matched: 0 }));
+    }
+
+    // getCallGraph trả Subgraph { nodes: Map<string,Node>, edges: Edge[], roots: string[] }
+    const sub = cg.getCallGraph(candidates[0].id, depth);
+    const rawNodes: any[] = Array.from((sub?.nodes as Map<string, any>)?.values?.() ?? []);
+    const rawEdges: any[] = Array.isArray(sub?.edges) ? sub.edges : [];
+
+    // Đếm bậc để Panel vẽ node quan trọng to hơn (linkCount trong GraphNode).
+    const degree = new Map<string, number>();
+    for (const e of rawEdges) {
+      degree.set(e.from ?? e.source, (degree.get(e.from ?? e.source) ?? 0) + 1);
+      degree.set(e.to ?? e.target, (degree.get(e.to ?? e.target) ?? 0) + 1);
+    }
+
+    // Cắt trần theo bậc giảm dần, giữ node gốc.
+    const rootId = candidates[0].id;
+    const kept = rawNodes
+      .sort((a, b) => (b.id === rootId ? 1 : 0) - (a.id === rootId ? 1 : 0)
+        || (degree.get(b.id) ?? 0) - (degree.get(a.id) ?? 0))
+      .slice(0, maxNodes);
+    const keptIds = new Set(kept.map((n) => n.id));
+
+    // community = nhóm theo file, để Panel tô màu theo file (giống cách Wiki tô theo cộng đồng).
+    const fileIndex = new Map<string, number>();
+    const communityOf = (p: string) => {
+      if (!fileIndex.has(p)) fileIndex.set(p, fileIndex.size);
+      return fileIndex.get(p) as number;
+    };
+
+    return c.json(wrapOk({
+      nodes: kept.map((n) => ({
+        id: n.id,
+        label: n.name ?? n.qualifiedName ?? n.id,
+        type: n.kind ?? "symbol",
+        path: n.filePath ?? "",
+        linkCount: degree.get(n.id) ?? 0,
+        community: communityOf(n.filePath ?? ""),
+      })),
+      edges: rawEdges
+        .map((e) => ({ source: e.from ?? e.source, target: e.to ?? e.target, weight: 1, kind: e.kind }))
+        .filter((e) => keptIds.has(e.source) && keptIds.has(e.target)),
+      roots: [rootId],
+      matched: candidates.length,
+      truncated: rawNodes.length > kept.length,
+    }));
+  });
+
   for (const action of CODEGRAPH_QUERY_TOOL_NAMES) {
     app.post(`/${action}`, async (c) => {
       const body = await c.req.json<Record<string, unknown>>();

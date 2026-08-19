@@ -30,6 +30,7 @@ import type {
   CodeGraphListResult,
   CodeGraphSyncResult,
   CodeGraphToolResult,
+  CodeGraphNeighborsData,
 } from '../ports/knowledge-client-port.js';
 
 export interface KnowledgeClientConfig {
@@ -186,5 +187,20 @@ export class HttpKnowledgeClient implements KnowledgeClientPort {
 
   async codeGraphQuery(codeGraphId: string, tool: string, params: Record<string, unknown>): Promise<CodeGraphToolResult> {
     return this.post(`/v3/code-graph/${tool}`, { code_graph_id: codeGraphId, ...params });
+  }
+
+  /** PATCH NỘI BỘ (Mắt Bão, 2026-08-19): xem CodeGraphNeighborsData ở port. */
+  async codeGraphNeighbors(
+    codeGraphId: string,
+    symbol: string,
+    opts?: { depth?: number; file?: string; maxNodes?: number },
+  ): Promise<CodeGraphNeighborsData> {
+    return this.post('/v3/code-graph/neighbors', {
+      code_graph_id: codeGraphId,
+      symbol,
+      depth: opts?.depth ?? 1,
+      ...(opts?.file ? { file: opts.file } : {}),
+      ...(opts?.maxNodes ? { max_nodes: opts.maxNodes } : {}),
+    });
   }
 }

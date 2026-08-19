@@ -6,6 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { Alert, Button, Card, MetricsBoard, SearchBox, StatusTip, Text } from 'tea-component';
 import { ArrowLeftIcon, CodeIcon, RefreshIcon } from 'tea-icons-react';
 import { AssetMarkdown } from '@/pages/ResourcePage/components/AssetMarkdown';
+// PATCH NỘI BỘ (Mắt Bão, 2026-08-19): tái dùng đúng component đồ thị của Wiki
+import KnowledgeGraph from '@/pages/wiki/WikiPage/components/KnowledgeGraph';
 import { formatRepoName } from './code-constants';
 import { statusLabel } from './code-ui';
 import type { CodeSourcesStore } from './useCodeSources';
@@ -26,6 +28,15 @@ export function CodeDetailView({ store }: { store: CodeSourcesStore }) {
     exploring,
     exploreResult,
     handleExplore,
+    // PATCH NỘI BỘ (Mắt Bão, 2026-08-19): đồ thị quanh 1 symbol
+    graphSymbol,
+    setGraphSymbol,
+    graphDepth,
+    setGraphDepth,
+    graphLoading,
+    graphData,
+    graphNote,
+    handleGraph,
   } = store;
 
   if (!selected) return null;
@@ -169,6 +180,44 @@ export function CodeDetailView({ store }: { store: CodeSourcesStore }) {
           {!exploring && exploreResult && (
             <div className="_codedetail-result-box">
               <AssetMarkdown content={exploreResult} compact />
+            </div>
+          )}
+        </Card.Body>
+      </Card>
+
+      {/* PATCH NỘI BỘ (Mắt Bão, 2026-08-19): sơ đồ quan hệ quanh 1 symbol.
+          Cả đồ thị là ~28k node/~78k edge nên chỉ vẽ vùng quanh symbol (1–2 bậc). */}
+      <Card>
+        <Card.Body title="Sơ đồ quan hệ">
+          <Text theme="label" parent="div" className="_codedetail-hint">
+            Nhập tên hàm/lớp để vẽ ai gọi nó và nó gọi ai. Bấm vào node để xem tên đầy đủ.
+          </Text>
+          <div className="_codedetail-search-row">
+            <SearchBox
+              size="full"
+              value={graphSymbol}
+              onChange={(v: string) => setGraphSymbol(v)}
+              onSearch={() => void handleGraph()}
+              placeholder="Ví dụ: getMandatoryCompletion"
+            />
+            <Button
+              type="weak"
+              onClick={() => {
+                const next = graphDepth === 1 ? 2 : 1;
+                setGraphDepth(next);
+                if (graphSymbol.trim()) void handleGraph();
+              }}
+            >
+              {graphDepth === 1 ? '1 bậc' : '2 bậc'}
+            </Button>
+          </div>
+          {graphLoading && <StatusTip status="loading" />}
+          {!graphLoading && graphNote && (
+            <Text theme="label" parent="div" className="_codedetail-hint">{graphNote}</Text>
+          )}
+          {!graphLoading && graphData && graphData.nodes.length > 0 && (
+            <div style={{ height: 460 }}>
+              <KnowledgeGraph data={graphData} loading={false} />
             </div>
           )}
         </Card.Body>

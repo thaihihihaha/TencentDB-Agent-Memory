@@ -151,6 +151,20 @@ export interface CodeGraphToolResult {
   isError: boolean;
 }
 
+/**
+ * PATCH NỘI BỘ (Mắt Bão, 2026-08-19)
+ * Subgraph quanh một symbol, đã map sẵn về shape đồ thị mà web dùng cho Wiki
+ * (GraphNode/GraphEdge) để tái dùng KnowledgeGraph.tsx. Các tool code_* khác chỉ
+ * trả text nên không vẽ được.
+ */
+export interface CodeGraphNeighborsData {
+  nodes: Array<{ id: string; label: string; type: string; path: string; linkCount: number; community: number }>;
+  edges: Array<{ source: string; target: string; weight: number; kind?: string }>;
+  roots: string[];
+  matched?: number;
+  truncated?: boolean;
+}
+
 // ── Port ──
 
 export interface KnowledgeClientPort {
@@ -186,4 +200,10 @@ export interface KnowledgeClientPort {
   codeGraphDelete(codeGraphIds: string[]): Promise<BatchDeleteResult>;
   codeGraphUpdateMeta(codeGraphId: string, patch: { repo_name?: string; summary?: string | null }): Promise<CodeGraphDetail>;
   codeGraphQuery(codeGraphId: string, tool: string, params: Record<string, unknown>): Promise<CodeGraphToolResult>;
+  /** PATCH NỘI BỘ (Mắt Bão, 2026-08-19): subgraph có cấu trúc để vẽ diagram. */
+  codeGraphNeighbors(
+    codeGraphId: string,
+    symbol: string,
+    opts?: { depth?: number; file?: string; maxNodes?: number },
+  ): Promise<CodeGraphNeighborsData>;
 }

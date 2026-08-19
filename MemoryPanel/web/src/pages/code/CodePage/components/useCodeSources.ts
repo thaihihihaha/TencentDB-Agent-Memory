@@ -4,7 +4,7 @@
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { knowledgeApi, type CodeGraphDetail } from '@/lib/knowledge-api';
+import { knowledgeApi, type CodeGraphDetail, type GraphData } from '@/lib/knowledge-api';
 import { useTeams, useAgents } from '@/services';
 import { readAuth } from '@/components/LoginGate';
 import { tea } from '@/lib/tea-bridge';
@@ -148,6 +148,12 @@ export function useCodeSources() {
   const [exploreQuery, setExploreQuery] = useState('');
   const [exploring, setExploring] = useState(false);
   const [exploreResult, setExploreResult] = useState('');
+  // PATCH NỘI BỘ (Mắt Bão, 2026-08-19): đồ thị quanh 1 symbol (xem knowledgeApi.code.neighbors)
+  const [graphSymbol, setGraphSymbol] = useState('');
+  const [graphDepth, setGraphDepth] = useState(1);
+  const [graphLoading, setGraphLoading] = useState(false);
+  const [graphData, setGraphData] = useState<GraphData | null>(null);
+  const [graphNote, setGraphNote] = useState('');
 
   // 请求序号防竞态：快速切换 tab 时，先发的请求可能后返回，
   // 旧 tab 的数据会覆盖新 tab 的数据。每次 fetch 递增序号，
@@ -342,6 +348,31 @@ export function useCodeSources() {
     setSubView('detail');
   };
 
+  /**
+   * PATCH NỘI BỘ (Mắt Bão, 2026-08-19): tải subgraph quanh symbol để vẽ diagram.
+   * Không tìm thấy symbol thì nodes rỗng — hiển thị ghi chú thay vì báo lỗi đỏ,
+   * vì gõ sai tên hàm là chuyện thường.
+   */
+  const handleGraph = async () => {
+    const symbol = graphSymbol.trim();
+    if (!symbol) return;
+    setGraphLoading(true);
+    setGraphData(null);
+    setGraphNote('');
+    try {
+      const res = await knowledgeApi.code.neighbors(selectedCgId, symbol, { depth: graphDepth });
+      const nodes = res?.nodes ?? [];
+      setGraphData({ nodes, edges: res?.edges ?? [] });
+      if (nodes.length === 0) setGraphNote(`Không tìm thấy symbol "${symbol}" trong đồ thị này.`);
+      else if (res?.truncated) setGraphNote(`Đồ thị lớn, đã cắt còn ${nodes.length} node theo bậc liên kết.`);
+    } catch (e: any) {
+      setGraphData(null);
+      tea.notify.error(e);
+    } finally {
+      setGraphLoading(false);
+    }
+  };
+
   const handleSearch = async () => {
     if (!searchQuery.trim()) return;
     setSearching(true);
@@ -422,6 +453,15 @@ export function useCodeSources() {
     setSearchResult,
     exploreQuery,
     setExploreQuery,
+    // PATCH NỘI BỘ (Mắt Bão, 2026-08-19)
+    graphSymbol,
+    setGraphSymbol,
+    graphDepth,
+    setGraphDepth,
+    graphLoading,
+    graphData,
+    graphNote,
+    handleGraph,
     exploring,
     exploreResult,
     setExploreResult,
