@@ -1670,3 +1670,61 @@ button:not(:disabled):active,
 ._memory-settings-module > .tea-switch {
   flex-shrink: 0;
 }
+
+/* Accessibility and responsive gates */
+:where(a, button, input, select, textarea, [role='button'], [role='tab'], [tabindex='0']):not(
+    [aria-hidden='true']
+  ):focus-visible {
+  outline: 2px solid var(--mx-action-primary) !important;
+  outline-offset: 2px !important;
+}
+
+.tea-search:focus-within,
+.tea-select.is-focused .tea-select__input,
+.tea-switch:focus-within .tea-switch__toggle {
+  outline: 2px solid var(--mx-action-primary);
+  outline-offset: 2px;
+}
+
+@media (max-width: 960px) {
+  ._asset-split,
+  ._memory-skills-split {
+    border-radius: var(--mx-card-radius);
+  }
+}
+
+@media (max-width: 767px) {
+  .tea-btn,
+  .tea-input,
+  .tea-search,
+  .tea-select__input,
+  ._memory-global-header-icon-btn {
+    min-height: 44px;
+  }
+
+  .tea-input,
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 720px) {
+  ._asset-page-header,
+  ._memory-global-header,
+  ._memory-workbench-task-card-head {
+    flex-wrap: wrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ._memory-app-shell *,
+  ._memory-app-shell *::before,
+  ._memory-app-shell *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
