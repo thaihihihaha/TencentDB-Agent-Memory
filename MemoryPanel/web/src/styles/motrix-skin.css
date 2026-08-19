@@ -1709,6 +1709,30 @@ button:not(:disabled):active,
   outline-offset: 2px;
 }
 
+:is(.is-error, .tea-form__controls.is-error)
+  :is(
+    .tea-input,
+    .tea-textarea,
+    .tea-textarea-group,
+    .tea-search,
+    .tea-select,
+    .tea-select__input,
+    .tea-dropdown__header,
+    input,
+    select,
+    textarea
+  ),
+:is(.tea-input, .tea-search, .tea-select, .tea-select__input, .tea-dropdown__header).is-error,
+:is(
+  input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file']):not(
+      [type='hidden']
+    ),
+  select,
+  textarea
+):is([aria-invalid='true'], :user-invalid, :invalid) {
+  border-color: var(--mx-destructive) !important;
+}
+
 @media (max-width: 960px) {
   ._asset-split,
   ._memory-skills-split {
@@ -1731,11 +1755,62 @@ button:not(:disabled):active,
   }
 
   .tea-form-check,
-  .tea-switch,
   .tea-list--option > li,
   .tea-tabs__tab,
   .tea-menu__item {
     min-height: 44px;
+  }
+
+  ._memory-tabbar {
+    height: auto;
+    min-height: 50px;
+    align-items: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  ._memory-tabbar-item {
+    height: 44px;
+  }
+
+  ._memory-tabbar-close {
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+  }
+
+  .tea-tabs__tabbar,
+  .tea-tabs__tablist {
+    min-height: 44px;
+  }
+
+  .tea-tabs__scroll-area {
+    min-height: 44px;
+    overflow-y: hidden;
+  }
+
+  .tea-tabs__tabitem {
+    height: 44px;
+    line-height: 44px;
+  }
+
+  .tea-tabs__tab {
+    height: 44px;
+  }
+
+  .tea-switch {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .tea-switch__toggle {
+    top: 50%;
+    left: 50%;
+    width: 35px;
+    height: 20px;
+    transform: translate(-50%, -50%);
   }
 
   .tea-input,
@@ -1769,6 +1844,16 @@ button:not(:disabled):active,
   ._wiki-detail-graph-embed [class*='bottom-3'] button {
     width: 44px;
     height: 44px;
+  }
+
+  ._wiki-detail-graph-embed input {
+    padding-right: 60px !important;
+  }
+
+  ._wiki-detail-graph-embed input + button {
+    width: 44px;
+    height: 44px;
+    padding: 0;
   }
 
   ._wiki-detail-graph-embed > [class*='border-b'] {
