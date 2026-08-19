@@ -1523,6 +1523,10 @@ button:not(:disabled):active,
   color: var(--mx-text-secondary) !important;
 }
 
+._memory-profile-section .tea-justify-grid__col--left > div {
+  font-size: var(--mx-font-body);
+}
+
 ._memory-team-header-avatar,
 ._memory-agent-card-icon,
 ._memory-member-avatar {
