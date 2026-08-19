@@ -36,6 +36,8 @@ export async function callApi(
   const url = `${opts.baseUrl.replace(/\/$/, "")}/v3${endpoint}`;
   const headers: Record<string, string> = { "Content-Type": "application/json" };
   if (opts.token) headers["Authorization"] = `Bearer ${opts.token}`;
+  // KS 的 code-graph / wiki 端点强制要求多租户路由键；缺失一律 400。
+  headers["x-tdai-service-id"] = process.env.KNOWLEDGE_SERVICE_ID || "default";
 
   log.debug(`POST ${url}`);
 

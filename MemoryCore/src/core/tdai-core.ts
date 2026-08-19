@@ -717,11 +717,18 @@ export class TdaiCore {
     // Kafka 未配置时 metricProducer.send() 是 no-op，零开销
     const trackingFactory = new MetricTrackingRunnerFactory(runnerFactory, () => this.instanceId);
 
+    // PATCH NỘI BỘ (Mắt Bão, 2026-08-19): truyền modelRef theo từng tầng.
+    // Upstream parse memory.extraction.model và memory.persona.model vào config
+    // (config.ts:551,559) nhưng KHÔNG BAO GIỜ truyền xuống createRunner → cả hai khoá
+    // là config chết, mọi tầng đều dùng llm.model toàn cục.
+    // Hệ quả đo được: L1 (đông request nhất) chung bucket quota 20 req/phút với L2/L3
+    // → 429 liên tục dù đã hạ concurrency về 1. Nay L1 đi model riêng (flash-lite),
+    // L2/L3 giữ model có tool-calling tốt (3.6-flash).
     const l1LlmRunner = useStandaloneRunner
-      ? trackingFactory.createRunner({ enableTools: false })
+      ? trackingFactory.createRunner({ enableTools: false, modelRef: this.cfg.extraction.model })
       : undefined;
     const l2l3LlmRunner = useStandaloneRunner
-      ? trackingFactory.createRunner({ enableTools: true })
+      ? trackingFactory.createRunner({ enableTools: true, modelRef: this.cfg.persona.model })
       : undefined;
 
     // L1 runner
@@ -1068,8 +1075,9 @@ export class TdaiCore {
     }
     // 用 MetricTrackingRunnerFactory 装饰器包装（非侵入式 credit 上报）
     const trackingFactory = new MetricTrackingRunnerFactory(runnerFactory, () => this.instanceId);
+    // PATCH NỘI BỘ (Mắt Bão, 2026-08-19): nhánh L1 thứ hai, xem ghi chú ở createRunner phía trên.
     const llmRunner = useStandaloneRunner
-      ? trackingFactory.createRunner({ enableTools: false })
+      ? trackingFactory.createRunner({ enableTools: false, modelRef: this.cfg.extraction.model })
       : undefined;
 
     const runner = createL1Runner({
