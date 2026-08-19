@@ -1551,6 +1551,28 @@ button:not(:disabled):active,
   padding: var(--mx-space-4);
 }
 
+/* Preserve readable identifier columns before the existing horizontal scroller takes over. */
+._memory-apikey-body .tea-table {
+  min-width: 632px;
+}
+
+._memory-apikey-body .tea-table col:nth-child(1) {
+  width: 130px !important;
+}
+
+._memory-apikey-body .tea-table col:nth-child(2) {
+  width: 110px !important;
+}
+
+._memory-apikey-body .tea-table col:nth-child(3),
+._memory-apikey-body .tea-table col:nth-child(4) {
+  width: 150px !important;
+}
+
+._memory-apikey-body .tea-table col:nth-child(5) {
+  width: 92px !important;
+}
+
 ._memory-apikey-body code,
 ._memory-apikey-fresh-code {
   font-family: var(--font-mono);
