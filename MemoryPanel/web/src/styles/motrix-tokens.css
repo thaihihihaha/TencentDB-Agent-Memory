@@ -1,0 +1,168 @@
+/* Layer 1: primitives */
+:root {
+  /* Neutral palette extracted from Motrix */
+  --mx-neutral-000: oklch(1 0 0);
+  --mx-neutral-015: oklch(0.985 0 0);
+  --mx-neutral-030: oklch(0.97 0 0);
+  --mx-neutral-050: oklch(0.95 0 0);
+  --mx-neutral-078: oklch(0.922 0 0);
+  --mx-neutral-292: oklch(0.708 0 0);
+  --mx-neutral-444: oklch(0.556 0 0);
+  --mx-neutral-731: oklch(0.269 0 0);
+  --mx-neutral-795: oklch(0.205 0 0);
+  --mx-neutral-855: oklch(0.145 0 0);
+
+  --mx-alpha-black-04: oklch(0 0 0 / 0.04);
+  --mx-alpha-black-06: oklch(0 0 0 / 0.06);
+  --mx-alpha-black-07: oklch(0 0 0 / 0.07);
+  --mx-alpha-black-10: oklch(0 0 0 / 0.1);
+  --mx-alpha-black-20: oklch(0 0 0 / 0.2);
+  --mx-alpha-white-55: oklch(1 0 0 / 0.55);
+  --mx-alpha-white-88: oklch(1 0 0 / 0.88);
+
+  --mx-data-cyan: hsl(193 83% 50%);
+  --mx-data-cyan-fill: #e6f8fc;
+  --mx-data-violet: hsl(243 96% 66%);
+  --mx-data-violet-fill: #f1f0ff;
+  --mx-destructive: oklch(0.577 0.245 27.325);
+
+  /* CSS replacement for native macOS Liquid Glass seen in Motrix shots */
+  --mx-glass-blue-1: #e8f8ff;
+  --mx-glass-blue-2: #d8f2ff;
+  --mx-glass-blue-3: #d8ecfe;
+  --mx-glass-violet: #ece9ff;
+
+  --mx-space-0-5: 2px;
+  --mx-space-1: 4px;
+  --mx-space-2: 8px;
+  --mx-space-2-5: 10px;
+  --mx-space-3: 12px;
+  --mx-space-4: 16px;
+  --mx-space-6: 24px;
+  --mx-space-8: 32px;
+  --mx-space-10: 40px;
+
+  --mx-radius-sm: 6px;
+  --mx-radius-md: 8px;
+  --mx-radius-lg: 10px;
+  --mx-radius-xl: 14px;
+  --mx-radius-tile: 18px;
+  --mx-radius-full: 9999px;
+
+  --mx-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+    sans-serif;
+  --mx-font-label: 10px;
+  --mx-font-meta: 12px;
+  --mx-font-body: 14px;
+  --mx-font-title: 24px;
+  --mx-font-kpi: 32px;
+
+  --mx-shadow-xs: 0 1px 2px oklch(0 0 0 / 0.05);
+  --mx-shadow-sm: 0 1px 2px oklch(0 0 0 / 0.07),
+    0 8px 24px oklch(0 0 0 / 0.035);
+  --mx-shadow-dialog: 0 24px 64px oklch(0 0 0 / 0.18);
+
+  --mx-duration-fast: 150ms;
+  --mx-duration-normal: 200ms;
+  --mx-duration-drawer: 300ms;
+  --mx-ease-standard: ease-in-out;
+  --mx-ease-out: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Layer 2: semantics */
+:root {
+  --mx-surface-app: var(--mx-neutral-015);
+  --mx-surface-content: var(--mx-alpha-white-88);
+  --mx-surface-card: var(--mx-neutral-000);
+  --mx-surface-subtle: var(--mx-neutral-030);
+  --mx-surface-selected: var(--mx-alpha-black-06);
+
+  --mx-text-primary: var(--mx-neutral-855);
+  --mx-text-secondary: var(--mx-neutral-444);
+  --mx-text-on-primary: var(--mx-neutral-015);
+
+  --mx-action-primary: var(--mx-neutral-795);
+  --mx-action-primary-hover: var(--mx-neutral-731);
+  --mx-action-primary-active: var(--mx-neutral-855);
+  --mx-action-focus: var(--mx-neutral-292);
+
+  --mx-border-default: var(--mx-neutral-078);
+  --mx-border-subtle: var(--mx-alpha-black-07);
+  --mx-overlay: var(--mx-alpha-black-20);
+
+  --mx-shell-gradient:
+    radial-gradient(circle at 84% 0%, var(--mx-glass-violet) 0, transparent 38%),
+    linear-gradient(
+      135deg,
+      var(--mx-glass-blue-1) 0%,
+      var(--mx-glass-blue-2) 48%,
+      var(--mx-glass-blue-3) 100%
+    );
+}
+
+/* Layer 3: components */
+:root {
+  --mx-sidebar-width: 200px;
+  --mx-sidebar-width-collapsed: 48px;
+  --mx-sidebar-row-height: 38px;
+  --mx-sidebar-row-radius: var(--mx-radius-md);
+
+  --mx-header-height: 48px;
+  --mx-tabbar-height: 36px;
+  --mx-content-inset: var(--mx-space-2);
+  --mx-content-radius: var(--mx-radius-xl);
+
+  --mx-button-height: 36px;
+  --mx-button-height-sm: 32px;
+  --mx-button-radius: var(--mx-radius-md);
+  --mx-input-height: 36px;
+  --mx-input-radius: var(--mx-radius-md);
+
+  --mx-card-radius: var(--mx-radius-xl);
+  --mx-card-padding: var(--mx-space-6);
+  --mx-tile-radius: var(--mx-radius-tile);
+  --mx-tile-padding: var(--mx-space-4);
+
+  --mx-table-header-height: 40px;
+  --mx-table-row-height: 48px;
+  --mx-table-cell-padding: var(--mx-space-2);
+
+  --mx-dialog-radius: var(--mx-radius-xl);
+  --mx-dialog-padding: var(--mx-space-6);
+  --mx-dialog-max-width: 448px;
+}
+
+:root {
+  --background: var(--mx-surface-card);
+  --background-deep: var(--mx-surface-app);
+  --foreground: var(--mx-text-primary);
+  --card: var(--mx-surface-card);
+  --card-foreground: var(--mx-text-primary);
+  --popover: var(--mx-surface-card);
+  --popover-foreground: var(--mx-text-primary);
+  --primary: var(--mx-action-primary);
+  --primary-foreground: var(--mx-text-on-primary);
+  --secondary: var(--mx-surface-subtle);
+  --secondary-foreground: var(--mx-text-primary);
+  --muted: var(--mx-surface-subtle);
+  --muted-foreground: var(--mx-text-secondary);
+  --accent: var(--mx-surface-selected);
+  --accent-hover: var(--mx-surface-selected);
+  --accent-foreground: var(--mx-text-primary);
+  --destructive: var(--mx-destructive);
+  --border: var(--mx-border-default);
+  --input: var(--mx-border-default);
+  --input-background: var(--mx-surface-card);
+  --ring: var(--mx-action-focus);
+  --tea-color-bg-page-default: var(--mx-surface-app);
+  --tea-color-bg-primary-default: var(--mx-surface-card);
+  --tea-color-bg-secondary-default: var(--mx-surface-subtle);
+  --tea-color-bg-secondary-hover: var(--mx-surface-selected);
+  --tea-color-bg-brand-default: var(--mx-action-primary);
+  --tea-color-text-primary: var(--mx-text-primary);
+  --tea-color-text-secondary: var(--mx-text-secondary);
+  --tea-color-border-primary-default: var(--mx-border-default);
+  --tea-color-border-secondary-default: var(--mx-border-subtle);
+  --tea-color-border-brand-default: var(--mx-action-focus);
+}
