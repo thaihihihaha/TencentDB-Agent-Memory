@@ -127,68 +127,59 @@ export function SettingsDialog({ onClose }: { onClose: () => void }) {
   return (
     <Modal visible caption={t('settings.caption')} size="m" onClose={onClose}>
       <Modal.Body>
-      {activeTab === 'permissions' && (
-        <div>
-          <div style={{ paddingTop: 4 }}>
-            <Text theme="label" style={{ display: 'block', marginBottom: 8 }}>
-              {t('settings.title')}
-            </Text>
-            <Text theme="weak" style={{ display: 'block', marginBottom: 16, fontSize: 12 }}>
-              {t('settings.desc')}
-            </Text>
-            {error && <Alert type="error" style={{ marginBottom: 12 }}>{error}</Alert>}
-            {loading && <Alert type="info" style={{ marginBottom: 12 }}>{t('settings.loadingConfig')}</Alert>}
+        {activeTab === 'permissions' && (
+          <div>
+            <div className="_memory-settings-body">
+              <Text theme="label" className="_memory-settings-title">
+                {t('settings.title')}
+              </Text>
+              <Text theme="weak" className="_memory-settings-description">
+                {t('settings.desc')}
+              </Text>
+              {error && <Alert type="error">{error}</Alert>}
+              {loading && <Alert type="info">{t('settings.loadingConfig')}</Alert>}
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              {RESOURCE_MODULES.map((mod) => (
-                <div
-                  key={mod.id}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '10px 12px',
-                    border: '1px solid var(--tea-color-border-primary-default)',
-                    borderRadius: 6,
-                    background: enabled[mod.id]
-                      ? 'var(--tea-color-bg-brand-lighten-default)'
-                      : 'var(--tea-color-bg-primary-default)',
-                    transition: 'background-color 0.15s',
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
-                    <span style={{ color: 'var(--tea-color-text-secondary)', flexShrink: 0 }}>
-                      {mod.icon}
-                    </span>
-                    <div style={{ minWidth: 0 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                        <Text style={{ fontSize: 13, fontWeight: 500 }}>
-                          {t(mod.labelKey)}
+              <div className="_memory-settings-modules">
+                {RESOURCE_MODULES.map((mod) => (
+                  <div
+                    key={mod.id}
+                    className={`_memory-settings-module${enabled[mod.id] ? ' _memory-settings-module--enabled' : ''}`}
+                  >
+                    <div className="_memory-settings-module-main">
+                      <span className="_memory-settings-module-icon">{mod.icon}</span>
+                      <div className="_memory-settings-module-copy">
+                        <div className="_memory-settings-module-heading">
+                          <Text className="_memory-settings-module-name">{t(mod.labelKey)}</Text>
+                          {savingKey === mod.paramKey ? (
+                            <Tag theme="warning" variant="soft" size="sm">
+                              {t('settings.tag.saving')}
+                            </Tag>
+                          ) : enabled[mod.id] ? (
+                            <Tag theme="success" variant="soft" size="sm">
+                              {t('settings.tag.enabled')}
+                            </Tag>
+                          ) : (
+                            <Tag theme="default" variant="soft" size="sm">
+                              {t('settings.tag.disabled')}
+                            </Tag>
+                          )}
+                        </div>
+                        <Text theme="weak" className="_memory-settings-module-description">
+                          {t(mod.descKey)}
                         </Text>
-                        {savingKey === mod.paramKey ? (
-                          <Tag theme="warning" variant="soft" size="sm">{t('settings.tag.saving')}</Tag>
-                        ) : enabled[mod.id] ? (
-                          <Tag theme="success" variant="soft" size="sm">{t('settings.tag.enabled')}</Tag>
-                        ) : (
-                          <Tag theme="default" variant="soft" size="sm">{t('settings.tag.disabled')}</Tag>
-                        )}
                       </div>
-                      <Text theme="weak" style={{ fontSize: 12, marginTop: 2, display: 'block' }}>
-                        {t(mod.descKey)}
-                      </Text>
                     </div>
+                    <Switch
+                      value={enabled[mod.id]}
+                      disabled={loading || savingKey === mod.paramKey}
+                      onChange={(v) => void handleToggle(mod, v)}
+                    />
                   </div>
-                  <Switch
-                    value={enabled[mod.id]}
-                    disabled={loading || savingKey === mod.paramKey}
-                    onChange={(v) => void handleToggle(mod, v)}
-                  />
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
       </Modal.Body>
     </Modal>
   );
