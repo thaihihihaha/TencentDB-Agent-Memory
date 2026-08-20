@@ -8,9 +8,11 @@ import 'tea-component/dist/themes/default-pack.css';
 import 'tea-component/dist/tea-themeable.css';
 import './index.css';
 import './tea-override.css';
+import './styles/motrix-tokens.css';
+import './styles/motrix-skin.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>
+  </React.StrictMode>,
 );

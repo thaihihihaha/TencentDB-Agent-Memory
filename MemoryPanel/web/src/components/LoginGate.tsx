@@ -16,7 +16,12 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Select, Input, Button, Alert } from 'tea-component';
-import { authVerifyApi, metaInstancesApi, type MetadataInstance, type PublicUser } from '@/lib/teamApi';
+import {
+  authVerifyApi,
+  metaInstancesApi,
+  type MetadataInstance,
+  type PublicUser,
+} from '@/lib/teamApi';
 import { getPanelSession, setPanelSession, clearPanelSession } from '@/lib/panelSession';
 import './login-gate.css';
 
@@ -196,11 +201,7 @@ function HeroIllustration() {
   );
 }
 
-export default function LoginGate({
-  onLoggedIn,
-}: {
-  onLoggedIn: (auth: AuthState) => void;
-}) {
+export default function LoginGate({ onLoggedIn }: { onLoggedIn: (auth: AuthState) => void }) {
   const { t } = useTranslation();
   const [instances, setInstances] = useState<MetadataInstance[]>([]);
   const [instanceId, setInstanceId] = useState('');
@@ -230,7 +231,11 @@ export default function LoginGate({
       .catch((err) => {
         if (cancelled) return;
         setInstancesError(true);
-        setError(t('login.error.loadInstances', { detail: err instanceof Error ? ` (${err.message})` : '' }));
+        setError(
+          t('login.error.loadInstances', {
+            detail: err instanceof Error ? ` (${err.message})` : '',
+          }),
+        );
       });
     return () => {
       cancelled = true;
@@ -278,9 +283,9 @@ export default function LoginGate({
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex">
+    <div className="_memory-login-root fixed inset-0 z-[100] flex">
       {/* ====== 左侧深色面板 ====== */}
-      <div className="hidden lg:flex flex-col flex-1 bg-[#0b1120] relative overflow-hidden">
+      <div className="_memory-login-visual hidden lg:flex flex-col flex-1 bg-[#0b1120] relative overflow-hidden">
         <div className="flex items-center gap-2.5 px-6 py-5">
           <img src="/logo.png" alt="Memory Hub" className="h-8 w-8" />
           <span className="text-[15px] font-semibold text-white/90 tracking-wide">Memory Hub</span>
@@ -291,9 +296,7 @@ export default function LoginGate({
           <h2 className="mt-8 text-xl font-semibold text-white/90 tracking-wide">
             TencentDB Memory Hub
           </h2>
-          <p className="mt-2 text-sm text-slate-400 text-center max-w-xs">
-            {t('login.tagline')}
-          </p>
+          <p className="mt-2 text-sm text-slate-400 text-center max-w-xs">{t('login.tagline')}</p>
         </div>
 
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -314,7 +317,7 @@ export default function LoginGate({
       </div>
 
       {/* ====== 右侧登录表单面板 ====== */}
-      <div className="w-full lg:w-[480px] xl:w-[520px] flex flex-col bg-white dark:bg-[#0f172a] overflow-y-auto">
+      <div className="_memory-login-form-shell w-full lg:w-[480px] xl:w-[520px] flex flex-col bg-white dark:bg-[#0f172a] overflow-y-auto">
         <div className="flex lg:hidden items-center gap-2.5 px-6 py-4 border-b border-slate-200 dark:border-slate-700">
           <img src="/logo.png" alt="Memory Hub" className="h-7 w-7" />
           <span className="text-[14px] font-semibold text-slate-800 dark:text-white/90">
@@ -322,11 +325,11 @@ export default function LoginGate({
           </span>
         </div>
 
-        <div className="flex-1 flex flex-col justify-center px-8 sm:px-12 lg:px-14 py-10">
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white/95">{t('login.welcome')}</h1>
-          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-            {t('login.subtitle')}
-          </p>
+        <div className="_memory-login-content flex-1 flex flex-col justify-center px-8 sm:px-12 lg:px-14 py-10">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white/95">
+            {t('login.welcome')}
+          </h1>
+          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">{t('login.subtitle')}</p>
 
           <form onSubmit={submit} className="mt-8 _tdai-login-form">
             {/* 记忆实例选择 — GET /api/v1/meta/instances */}
@@ -339,7 +342,11 @@ export default function LoginGate({
                 setError(null);
               }}
               disabled={submitting || instances.length === 0}
-              placeholder={instancesError ? t('login.placeholder.instanceError') : t('login.placeholder.instance')}
+              placeholder={
+                instancesError
+                  ? t('login.placeholder.instanceError')
+                  : t('login.placeholder.instance')
+              }
               options={instances.map((inst) => ({ value: inst.instance_id, text: inst.name }))}
             />
 
@@ -359,14 +366,13 @@ export default function LoginGate({
                 disabled={submitting}
                 rules={false}
               />
-              <div className="_tdai-login-hint">
-                {t('login.hint.userKey')}
-              </div>
+              <div className="_tdai-login-hint">{t('login.hint.userKey')}</div>
             </div>
 
             {error && <Alert type="error">{error}</Alert>}
 
-            <Button type="primary"
+            <Button
+              type="primary"
               htmlType="submit"
               className="_tdai-login-submit"
               loading={submitting}
