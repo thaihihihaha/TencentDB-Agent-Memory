@@ -722,6 +722,10 @@ button:not(:disabled):active,
   font-variant-numeric: tabular-nums;
 }
 
+._memory-workbench-drawer-subtitle {
+  margin-left: var(--mx-space-2);
+}
+
 ._memory-workbench-task-card-time,
 ._memory-workbench-drawer-subtitle,
 ._memory-workbench-footer.tea-text,

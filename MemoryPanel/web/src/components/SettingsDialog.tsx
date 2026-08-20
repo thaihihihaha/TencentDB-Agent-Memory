@@ -10,19 +10,8 @@
  */
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Alert,
-  Switch,
-  Text,
-  Tag,
-  Modal,
-} from 'tea-component';
-import {
-  BooksIcon,
-  CodeIcon,
-  ToolsIcon,
-  ChatIcon,
-} from 'tea-icons-react';
+import { Alert, Switch, Text, Tag, Modal } from 'tea-component';
+import { BooksIcon, CodeIcon, ToolsIcon, ChatIcon } from 'tea-icons-react';
 import { userConfigApi, type AssetCapabilityKey } from '@/lib/teamApi';
 import { tea } from '@/lib/tea-bridge';
 
@@ -87,7 +76,8 @@ export function SettingsDialog({ onClose }: { onClose: () => void }) {
     let cancelled = false;
     setLoading(true);
     setError('');
-    userConfigApi.getAssetCapabilities()
+    userConfigApi
+      .getAssetCapabilities()
       .then((cfg) => {
         if (cancelled) return;
         setEnabled({
@@ -103,7 +93,9 @@ export function SettingsDialog({ onClose }: { onClose: () => void }) {
       .finally(() => {
         if (!cancelled) setLoading(false);
       });
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   async function handleToggle(mod: ResourceModule, next: boolean) {
@@ -113,7 +105,11 @@ export function SettingsDialog({ onClose }: { onClose: () => void }) {
     setError('');
     try {
       await userConfigApi.setAssetCapability(mod.paramKey, next);
-      tea.notify.success(t(next ? 'settings.notify.enabled' : 'settings.notify.disabled', { label: t(mod.labelKey) }));
+      tea.notify.success(
+        t(next ? 'settings.notify.enabled' : 'settings.notify.disabled', {
+          label: t(mod.labelKey),
+        }),
+      );
     } catch (e) {
       setEnabled((prev) => ({ ...prev, [mod.id]: previous }));
       const msg = e instanceof Error ? e.message : String(e);
